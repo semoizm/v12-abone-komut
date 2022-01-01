@@ -1,32 +1,42 @@
-const Discord = require('discord.js');
-const db = require('quick.db')
+const Discord = require("discord.js"),
+client = new Discord.Client();
+const db = require("quick.db")
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
+let kayitciuye = '' // abone yetkilisi rolünün idsi
+let verilecekrol = message.guild.roles.cache.get('')//abone rolünün idsi
 
-let yetki = message.guild.roles.cache.get(``) //abone yetkili rolünüzün idsi
-let abone = message.guild.roles.cache.get(``) //abone rolünüzün idsi
 
 
- if(![yetki].some(role => message.member.roles.cache.get(role)) && !message.member.hasPermission('ADMINISTRATOR')) return message.reply(`Bu Komut İçin Yetkiniz Bulunmamaktadır.`) 
+ if (!message.member.roles.cache.has(kayitciuye) && !message.member.hasPermission('ADMINISTRATOR')) return console.log(`${message.author.username} komutu kullanmaya çalıştı.`)
+let semoizm1 = message.mentions.users.first() || client.users.cache.get(args.join(' ')) || message.guild.members.cache.find(c=> c.id === args[0])
+  if (!semoizm1) return console.log(`${message.author.username} komutu yanlış kullandı!`);
+   let semoizm = message.guild.member(semoizm1)
+   let oncedenabone = db.fetch(`abonerolu_${semoizm.id}`)
+   if (verilecekrol) return message.react(''); //x emoji idsi
+     
+if(oncedenabone == null){
+ 
+  semoizm.roles.add(verilecekrol);
+  
+  const denemeh = semoizm.id
+
+    
+  db.add(`abonerolu_${denemeh}`, 1)
+db.add(`abonerolusayisi.${message.author.id}`, 1);
+	  db.set(`serverData.${message.guild.id}.userData.${denemeh}.owner`,  message.author.id)
+message.react(''); // tik emoji idsi
    
- let kullanıcı = message.mentions.users.first()
-  if (!kullanıcı) return message.channel.send('Kullanıcıyı etiketlemelisin.').then(msg => msg.delete(10000))
-  let member = message.guild.member(kullanıcı)
-  member.roles.add(abone)
-// message.channel.send("Başarıyla abone rolü verildi!")
-message.delete()
+    const embed1 = new Discord.MessageEmbed() 
+    
+} else {
+message.react(''); // x emoji idsi
+  message.author.send(`**${semoizm.user.username}** | \`${semoizm.id}\` daha önceden abone rolü alıp sunucudan ayrıldığı için abone rolü verilememiştir.`)
+}
+  
 };
-
-exports.conf = {
-  enabled: true,
+exports.config = {
+  name: "abone",
   guildOnly: true,
-  aliases: ['youtube','yt','a'],
-  kategori: "",
-  permLevel: 0
-}
-
-exports.help = {
-  name: 'abone',
-  description: "Abone rolü vermeye ne dersin?",
-  usage: 'abone @etiket'
-}
+  aliases: [],
+};
