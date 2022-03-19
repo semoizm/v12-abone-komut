@@ -13,7 +13,7 @@ let semoizm1 = message.mentions.users.first() || client.users.cache.get(args.joi
   if (!semoizm1) return console.log(`${message.author.username} komutu yanlış kullandı!`);
    let semoizm = message.guild.member(semoizm1)
    let oncedenabone = db.fetch(`abonerolu_${semoizm.id}`)
-   if (verilecekrol) return message.react(''); //x emoji idsi
+   if (!verilecekrol) return message.react(''); //x emoji idsi
      
 if(oncedenabone == null){
  
